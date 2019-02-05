@@ -1,4 +1,4 @@
-# SeeSaw Firmware
+# CircuitPython Firmware
 Use with https://github.com/adafruit/circuitpython
 
 ### ports/atmel-samd/board/roboticsmasters_mm1/
