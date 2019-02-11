@@ -7,7 +7,7 @@
 
 
 // Salae reads 12mhz which is the limit even though we set it to the safer 8mhz.
-#define SPI_FLASH_BAUDRATE  (8000000)
+//#define SPI_FLASH_BAUDRATE  (8000000)
 
 // On-board flash
 #define SPI_FLASH_MOSI_PIN          &pin_PA08
