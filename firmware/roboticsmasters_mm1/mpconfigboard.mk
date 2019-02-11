@@ -1,17 +1,18 @@
-LD_FILE = boards/samd21x18-bootloader-external-flash.ld
-USB_VID = 0x239A
-USB_PID = 0x8015
+LD_FILE = boards/samd21x18-bootloader-external-flash-crystalless.ld
+USB_VID = 0x0005
+USB_PID = 0x0005
 USB_PRODUCT = "MM1 HAT"
-USB_MANUFACTURER = "Robotics Masters"
+USB_MANUFACTURER = "RoboticsMasters"
 
 SPI_FLASH_FILESYSTEM = 1
 EXTERNAL_FLASH_DEVICE_COUNT = 1
-EXTERNAL_FLASH_DEVICES = "S25FL116K"
+EXTERNAL_FLASH_DEVICES = "ST26VF016B"
 LONGINT_IMPL = MPZ
 
 CHIP_VARIANT = SAMD21G18A
 CHIP_FAMILY = samd21
 
+CFLAGS_INLINE_LIMIT = 55
 
 # Include these Python libraries in firmware.
 FROZEN_MPY_DIRS += $(TOP)/frozen/Adafruit_CircuitPython_BusDevice
