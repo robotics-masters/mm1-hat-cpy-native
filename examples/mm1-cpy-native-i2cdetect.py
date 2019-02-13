@@ -40,7 +40,7 @@ while True:
     while not i2c.try_lock():
         pass
 
-    [hex(x) for x in i2c.scan()]
+    [print(hex(x)) for x in i2c.scan()]
 
     i2c.unlock()
 
