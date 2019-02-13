@@ -15,6 +15,7 @@ STATIC const mp_rom_map_elem_t board_global_dict_table[] = {
 	{ MP_ROM_QSTR(MP_QSTR_SIGNAL9), MP_ROM_PTR(&pin_PA02) },
 	{ MP_ROM_QSTR(MP_QSTR_SIGNAL10), MP_ROM_PTR(&pin_PA03) },
 	{ MP_ROM_QSTR(MP_QSTR_SIGNAL11), MP_ROM_PTR(&pin_PA12) },
+	{ MP_ROM_QSTR(MP_QSTR_LED), MP_ROM_PTR(&pin_PA12) },
 	
 	// SERVO Pins (Primary)
 	{ MP_ROM_QSTR(MP_QSTR_SERVO1), MP_ROM_PTR(&pin_PB10) },
