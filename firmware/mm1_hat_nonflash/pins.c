@@ -5,7 +5,9 @@
 STATIC const mp_rom_map_elem_t board_global_dict_table[] = {	
 	// SIGNAL I/O Pins (Primary)
 	{ MP_ROM_QSTR(MP_QSTR_SIGNAL1), MP_ROM_PTR(&pin_PB02) },
+	{ MP_ROM_QSTR(MP_QSTR_POWER_ENABLE), MP_ROM_PTR(&pin_PB02) },
 	{ MP_ROM_QSTR(MP_QSTR_SIGNAL2), MP_ROM_PTR(&pin_PB03) },
+	{ MP_ROM_QSTR(MP_QSTR_BUTTON), MP_ROM_PTR(&pin_PB03) },
 	{ MP_ROM_QSTR(MP_QSTR_SIGNAL3), MP_ROM_PTR(&pin_PB08) },
 	{ MP_ROM_QSTR(MP_QSTR_SIGNAL4), MP_ROM_PTR(&pin_PB09) },
 	{ MP_ROM_QSTR(MP_QSTR_SIGNAL5), MP_ROM_PTR(&pin_PA15) },
