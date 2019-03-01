@@ -22,9 +22,9 @@ led.direction = Direction.OUTPUT
 
 pwm1 = PWMOut(board.SERVO1, duty_cycle=2 ** 15, frequency=50)
 pwm2 = PWMOut(board.SERVO2, duty_cycle=2 ** 15, frequency=50)
-steering_servo = servo.Servo(pwm1)
+#steering_servo = servo.Servo(pwm1)
 #throttle_servo = servo.Servo(pwm2)
-#steering_servo = PulseOut(pwm1)
+steering_servo = PulseOut(pwm1)
 throttle_servo = PulseOut(pwm2)
 
 steering_channel = PulseIn(board.RCH1)
@@ -73,15 +73,15 @@ while True:
     
     print(throttle_channel[0])
     
-    throttle_servo.send(array('H', [get_range(throttle_channel[0])]))
+    throttle_servo.send(array('H', [(throttle_channel[0])]))
     #throttle_servo.angle = get_angle(steering_channel[0])
     
     
-    throttle_channel.clear()
+    #throttle_channel.clear()
     
-    throttle_channel.resume(20000)
+    throttle_channel.resume()
     
-    #time.sleep(0.01)
+    time.sleep(0.01)
     ### working between here and last comment
     
     # while len(steering_channel) == 0 or len(throttle_channel) == 0:
