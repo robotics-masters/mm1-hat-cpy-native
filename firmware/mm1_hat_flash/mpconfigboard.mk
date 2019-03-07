@@ -1,8 +1,8 @@
 LD_FILE = boards/samd21x18-bootloader-external-flash-crystalless.ld
 USB_VID = 0x0005
 USB_PID = 0x0005
-USB_PRODUCT = "MM1 HAT"
-USB_MANUFACTURER = "RoboticsMasters"
+USB_PRODUCT = "Robo MM1 HAT"
+USB_MANUFACTURER = "Robotics Masters"
 
 # Non-Flash Edition
 #INTERNAL_FLASH_FILESYSTEM = 1

@@ -1,19 +1,7 @@
-#define MICROPY_HW_BOARD_NAME "Robo HAT MM1"
+#define MICROPY_HW_BOARD_NAME "Robotics Masters MM1 HAT"
 #define MICROPY_HW_MCU_NAME "samd21g18"
 
 #define MICROPY_HW_LED_STATUS   (&pin_PA12)
-
-//#define MICROPY_HW_NEOPIXEL (&pin_PA06)
-
-
-// Salae reads 12mhz which is the limit even though we set it to the safer 8mhz.
-#define SPI_FLASH_BAUDRATE  (8000000)
-
-// On-board flash
-#define SPI_FLASH_MOSI_PIN          &pin_PA08
-#define SPI_FLASH_MISO_PIN          &pin_PA14
-#define SPI_FLASH_SCK_PIN           &pin_PA09
-#define SPI_FLASH_CS_PIN            &pin_PA13
 
 // These are pins not to reset.
 #define MICROPY_PORT_A        ( 0 ) //PORT_PA06
@@ -23,11 +11,10 @@
 
 // If you change this, then make sure to update the linker scripts as well to
 // make sure you don't overwrite code.
-#define CIRCUITPY_INTERNAL_NVM_SIZE 256
+#define CIRCUITPY_INTERNAL_NVM_SIZE 0
 
-#define BOARD_FLASH_SIZE (0x00040000 - 0x2000 - CIRCUITPY_INTERNAL_NVM_SIZE)
+#define BOARD_FLASH_SIZE (0x00040000 - 0x2000 - 0x010000)
 
-//#define BOARD_HAS_CRYSTAL 0
 #define CALIBRATE_CRYSTALLESS 1
 
 #define DEFAULT_I2C_BUS_SCL (&pin_PA23)
