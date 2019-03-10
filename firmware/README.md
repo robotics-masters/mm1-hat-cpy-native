@@ -33,3 +33,12 @@ Further instruction: https://learn.adafruit.com/building-circuitpython/build-cir
 ```
 ports/atmel-samd/builds
 ```
+
+
+# Updating Firmware
+
+1. Attach Robo HAT MM1 to your computer via USB.
+2. Double Tap 'reset' button to put board into UF2 Bootloader mode
+3. Copy firmware.uf2 from the build folder to the USB Drive called "MM1BOOT".
+4. Wait for CircuitPython to be installed (about 5 seconds).
+5. Done.
