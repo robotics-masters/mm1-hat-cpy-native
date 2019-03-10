@@ -6,10 +6,6 @@ Examples and Firmware for the Robo HAT MM1 using CircuitPython on M0.
 
 CircuitPython is an education friendly open source derivative of MicroPython. CircuitPython supports use on educational development boards designed and sold by Adafruit. [Adafruit CircuitPython](https://github.com/adafruit/circuitpython) features unified Python core APIs and a growing list of Adafruit libraries and drivers of that work with it.
 
-## Build UF2 Bootloader
-
-Please see the mm1-hat-cpy-native/uf2-bootloader folder for further instructions.
-
 ## Build CircuitPython
 
 Please see the mm1-hat-cpy-native/firmware folder for further instructions.
