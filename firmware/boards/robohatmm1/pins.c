@@ -21,7 +21,7 @@ STATIC const mp_rom_map_elem_t board_global_dict_table[] = {
 	{ MP_ROM_QSTR(MP_QSTR_I2C_SDA), MP_ROM_PTR(&pin_PA00) },
 	{ MP_ROM_QSTR(MP_QSTR_I2C_SCL), MP_ROM_PTR(&pin_PA01) },
 	
-	{ MP_ROM_QSTR(MP_QSTR_BATGUAGE), MP_ROM_PTR(&pin_PA02) },
+	{ MP_ROM_QSTR(MP_QSTR_BATTERY), MP_ROM_PTR(&pin_PA02) },
 	{ MP_ROM_QSTR(MP_QSTR_POWER_OFF), MP_ROM_PTR(&pin_PA03) },
 	{ MP_ROM_QSTR(MP_QSTR_POWER_ENABLE), MP_ROM_PTR(&pin_PA28) },
 	
