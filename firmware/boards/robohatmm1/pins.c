@@ -18,9 +18,6 @@ STATIC const mp_rom_map_elem_t board_global_dict_table[] = {
 	{ MP_ROM_QSTR(MP_QSTR_RCH4), MP_ROM_PTR(&pin_PA04) },
 	
 	// Special Function (Primary)
-	{ MP_ROM_QSTR(MP_QSTR_I2C_SDA), MP_ROM_PTR(&pin_PA00) },
-	{ MP_ROM_QSTR(MP_QSTR_I2C_SCL), MP_ROM_PTR(&pin_PA01) },
-	
 	{ MP_ROM_QSTR(MP_QSTR_BATTERY), MP_ROM_PTR(&pin_PA02) },
 	{ MP_ROM_QSTR(MP_QSTR_POWER_OFF), MP_ROM_PTR(&pin_PA03) },
 	{ MP_ROM_QSTR(MP_QSTR_POWER_ENABLE), MP_ROM_PTR(&pin_PA28) },
@@ -44,6 +41,10 @@ STATIC const mp_rom_map_elem_t board_global_dict_table[] = {
 	{ MP_ROM_QSTR(MP_QSTR_FLASH_MISO), MP_ROM_PTR(&pin_PA14) },
 	{ MP_ROM_QSTR(MP_QSTR_FLASH_MOSI), MP_ROM_PTR(&pin_PA12) },
 	{ MP_ROM_QSTR(MP_QSTR_FLASH_CS), MP_ROM_PTR(&pin_PA15) },
+
+	// I2C on SERCOM3
+	{ MP_ROM_QSTR(MP_QSTR_I2C_SDA), MP_ROM_PTR(&pin_PA00) },
+	{ MP_ROM_QSTR(MP_QSTR_I2C_SCL), MP_ROM_PTR(&pin_PA01) },
 	
 	// SPI on SERCOM4
 	{ MP_ROM_QSTR(MP_QSTR_SPI_SCK), MP_ROM_PTR(&pin_PB11) },
@@ -58,9 +59,9 @@ STATIC const mp_rom_map_elem_t board_global_dict_table[] = {
 	{ MP_ROM_QSTR(MP_QSTR_GPS_SCL), MP_ROM_PTR(&pin_PA01) },
 	
 	// Raspberry Pi (Secondary)
-	{ MP_ROM_QSTR(MP_QSTR_GPIO25), MP_ROM_PTR(&pin_PA30) },
-	{ MP_ROM_QSTR(MP_QSTR_GPIO24), MP_ROM_PTR(&pin_PA31) },
-	{ MP_ROM_QSTR(MP_QSTR_GPIO5), MP_ROM_PTR(&pin_PA27) },
+	{ MP_ROM_QSTR(MP_QSTR_PI_GP25), MP_ROM_PTR(&pin_PA30) },
+	{ MP_ROM_QSTR(MP_QSTR_PI_GP24), MP_ROM_PTR(&pin_PA31) },
+	{ MP_ROM_QSTR(MP_QSTR_PI_GP5), MP_ROM_PTR(&pin_PA27) },
 	{ MP_ROM_QSTR(MP_QSTR_PI_RX), MP_ROM_PTR(&pin_PB22) },
 	{ MP_ROM_QSTR(MP_QSTR_PI_TX), MP_ROM_PTR(&pin_PB23) },
 	
