@@ -1,7 +1,7 @@
 #include "shared-bindings/board/__init__.h"
 
 STATIC const mp_rom_map_elem_t board_global_dict_table[] = {	
-	// SERVO Pins (Primary)
+	// SERVO Pins
 	{ MP_ROM_QSTR(MP_QSTR_SERVO1), MP_ROM_PTR(&pin_PA16) },
 	{ MP_ROM_QSTR(MP_QSTR_SERVO2), MP_ROM_PTR(&pin_PA17) },
 	{ MP_ROM_QSTR(MP_QSTR_SERVO3), MP_ROM_PTR(&pin_PA18) },
@@ -11,18 +11,17 @@ STATIC const mp_rom_map_elem_t board_global_dict_table[] = {
 	{ MP_ROM_QSTR(MP_QSTR_SERVO7), MP_ROM_PTR(&pin_PA09) },
 	{ MP_ROM_QSTR(MP_QSTR_SERVO8), MP_ROM_PTR(&pin_PA08) },
 	
-	// RC_CH Pins (Primary)
+	// RC_CH Pins
 	{ MP_ROM_QSTR(MP_QSTR_RCH1), MP_ROM_PTR(&pin_PA07) },
 	{ MP_ROM_QSTR(MP_QSTR_RCH2), MP_ROM_PTR(&pin_PA06) },
 	{ MP_ROM_QSTR(MP_QSTR_RCH3), MP_ROM_PTR(&pin_PA05) },
 	{ MP_ROM_QSTR(MP_QSTR_RCH4), MP_ROM_PTR(&pin_PA04) },
 	
-	// Special Function (Primary)
+	// Special Function
 	{ MP_ROM_QSTR(MP_QSTR_BATTERY), MP_ROM_PTR(&pin_PA02) },
 	{ MP_ROM_QSTR(MP_QSTR_POWER_OFF), MP_ROM_PTR(&pin_PA03) },
 	{ MP_ROM_QSTR(MP_QSTR_POWER_ENABLE), MP_ROM_PTR(&pin_PA28) },
 	
-	{ MP_ROM_QSTR(MP_QSTR_BUTTON), MP_ROM_PTR(&pin_PA03) },
 	{ MP_ROM_QSTR(MP_QSTR_NEOPIXEL), MP_ROM_PTR(&pin_PA20) },
 	{ MP_ROM_QSTR(MP_QSTR_LED), MP_ROM_PTR(&pin_PA21) },
 	{ MP_ROM_QSTR(MP_QSTR_SDA), MP_ROM_PTR(&pin_PA22) },
@@ -52,13 +51,13 @@ STATIC const mp_rom_map_elem_t board_global_dict_table[] = {
 	{ MP_ROM_QSTR(MP_QSTR_SPI_MOSI), MP_ROM_PTR(&pin_PB10) },
 	{ MP_ROM_QSTR(MP_QSTR_SPI_SS), MP_ROM_PTR(&pin_PB09) },
 	
-	// GPS on SERCOM5 (Primary)
+	// GPS on SERCOM5
 	{ MP_ROM_QSTR(MP_QSTR_GPS_TX), MP_ROM_PTR(&pin_PB02) },
 	{ MP_ROM_QSTR(MP_QSTR_GPS_RX), MP_ROM_PTR(&pin_PB03) },
 	{ MP_ROM_QSTR(MP_QSTR_GPS_SDA), MP_ROM_PTR(&pin_PA00) },
 	{ MP_ROM_QSTR(MP_QSTR_GPS_SCL), MP_ROM_PTR(&pin_PA01) },
 	
-	// Raspberry Pi (Secondary)
+	// Raspberry Pi
 	{ MP_ROM_QSTR(MP_QSTR_PI_GP25), MP_ROM_PTR(&pin_PA30) },
 	{ MP_ROM_QSTR(MP_QSTR_PI_GP24), MP_ROM_PTR(&pin_PA31) },
 	{ MP_ROM_QSTR(MP_QSTR_PI_GP5), MP_ROM_PTR(&pin_PA27) },
