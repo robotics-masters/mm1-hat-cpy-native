@@ -8,25 +8,20 @@ import time
 import board
 import busio
 
-#from analogio import AnalogIn
 from digitalio import DigitalInOut, Direction
-
 from pulseio import PWMOut, PulseIn, PulseOut
-from array import array
-#from adafruit_motor import servo
 
 ## set up on-board LED
 led = DigitalInOut(board.LED)
 led.direction = Direction.OUTPUT
-led.value = 1
 
 ## set up serial UART
 # note UART(TX, RX, baudrate)
-uart = busio.UART(board.UART_TX, board.UART_RX, baudrate=115200)
+uart = busio.UART(board.PI_RX, board.PI_TX, baudrate = 115200, timeout = 0.001)
 
 ## set up servos and radio control channels
-steering_pwm = PWMOut(board.SERVO1, duty_cycle=2 ** 15, frequency=50)
-throttle_pwm = PWMOut(board.SERVO2, duty_cycle=2 ** 15, frequency=50)
+steering_pwm = PWMOut(board.SERVO1, duty_cycle = 2 ** 15, frequency = 50)
+throttle_pwm = PWMOut(board.SERVO2, duty_cycle = 2 ** 15, frequency = 50)
 
 steering_channel = PulseIn(board.RCH1, maxlen=64, idle_state=0)
 throttle_channel = PulseIn(board.RCH2, maxlen=64, idle_state=0)
@@ -36,17 +31,8 @@ SMOOTHING_INTERVAL_IN_S = 0.025
 DEBUG = False
 last_update = time.monotonic()
 
-
-class Control:
-     def __init__(self, name, servo, channel, value):
-	self.name = name
-	self.servo = servo
-	self.channel = channel
-	self.value = value
-	self.servo.duty_cycle = servo_duty_cycle(value)
-
 ## Hardware Notification: starting
-print("preparing to start..")
+print("preparing to start...")
 for i in range(0, 2):
 	led.value = True
 	time.sleep(0.5)
@@ -56,17 +42,10 @@ for i in range(0, 2):
 ## GO TO: main()
 
 ## functions
-def get_voltage(pin):
-	return (pin.value * 3.3) / 65536
-
 def servo_duty_cycle(pulse_ms, frequency = 50):
 	period_ms = 1.0 / frequency * 1000.0
 	duty_cycle = int(pulse_ms / 1000 / (period_ms / 65535.0))
 	return duty_cycle
-
-def get_angle(time):
-	# TODO: 1000ms==0°, 2000ms==270°. So: (ms-999)*1001/270
-	return (time)/(18) + 7.5
 
 def state_changed(control):
 	control.channel.pause()
@@ -74,21 +53,34 @@ def state_changed(control):
 		val = control.channel[i]
 		if(val < 1000 or val > 2000):
 			continue
-		control.value = (control.value + val) /2
-#		print(control.channel[i])
+		control.value = (control.value + val) / 2
 
 	if DEBUG:
 		print("%f\t%s (%i): %i (%i)" % (time.monotonic(), control.name, len(control.channel), control.value, servo_duty_cycle(control.value)))
 	control.channel.clear()
 	control.channel.resume()
 
+class Control:
+     def __init__(self, name, servo, channel, value):
+	self.name = name
+	self.servo = servo
+	self.channel = channel
+	self.value = value
+	self.servo.duty_cycle = servo_duty_cycle(value)
+
 steering = Control("Steering", steering_pwm, steering_channel, 1500)
 throttle = Control("Throttle", throttle_pwm, throttle_channel, 1000)
 
 def main():
 	global last_update
+	
+	data = bytearray('')
+	datastr = ''
+	last_input = 0
+	steering_val = steering.value
+	throttle_val = throttle.value
+
 	while True:
-    # TODO: serial send data
 		if(last_update + SMOOTHING_INTERVAL_IN_S > time.monotonic()):
 			continue
 		last_update = time.monotonic()
@@ -99,9 +91,43 @@ def main():
 		if(len(steering.channel) != 0):
 			state_changed(steering)
 
-		print("%i, %i" % (int(steering.value), int(throttle.value)))
-		steering.servo.duty_cycle = servo_duty_cycle(steering.value)
-		throttle.servo.duty_cycle = servo_duty_cycle(throttle.value)
+		if(DEBUG):
+			print("Get: %i, %i" % (int(steering.value), int(throttle.value)))
+		uart.write(b"%i, %i\r\n" % (int(steering.value), int(throttle.value)))
+		while True:
+			byte = uart.read(1)
+			if(byte == None):
+				break
+			last_input = time.monotonic()
+			if(DEBUG):
+				print("Read from UART: %s" % (byte))
+			if(byte == b'\r'):
+				data = bytearray('')
+				datastr = ''
+				break
+			data[len(data):len(data)] = byte
+			datastr = ''.join([chr(c) for c in data]).strip() # convert bytearray to string
+		if(len(datastr) >= 10):
+			steering_val = steering.value
+			throttle_val = throttle.value
+			try:
+				steering_val = int(datastr[:4])
+				throttle_val = int(datastr[-4:])
+			except ValueError:
+				None
+				
+			data=bytearray('')
+			datastr = ''
+			last_input = time.monotonic()
+			if(DEBUG):
+				print("Set: %i, %i" % (steering_val, throttle_val))
+
+		if(last_input + 10 < time.monotonic()):
+			steering.servo.duty_cycle = servo_duty_cycle(steering.value)
+			throttle.servo.duty_cycle = servo_duty_cycle(throttle.value)
+		else:
+			steering.servo.duty_cycle = servo_duty_cycle(steering_val)
+			throttle.servo.duty_cycle = servo_duty_cycle(throttle_val)
 
 
 ## Run
