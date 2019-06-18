@@ -13,8 +13,9 @@ cd circuitpython/
 git submodule update --init --recursive
 make -C mpy-cross
 cd circuitpython/ports/atmel-samd
-cp -r ../../../mm1-hat-cpy-native/firmware/mm1_hat_nonflash boards/mm1_hat_nonflash
 ```
+
+The last step is to copy your board settings into the boards/ folder if it is not included by default.
 
 ## Build Steps
 
