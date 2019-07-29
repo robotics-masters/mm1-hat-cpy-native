@@ -8,7 +8,7 @@
 #  
 
 import board
-from digitalio import DigitalInOut, Direction
+from digitalio import DigitalInOut, Direction, Pull
 from pulseio import PWMOut
 from adafruit_motor import servo
 from busio import I2C
@@ -42,6 +42,30 @@ while (num_tests > 0):
     num_tests = num_tests - 1
 
 print("[INFO] END - LED Test")
+
+
+# test BUTTON
+print("[INFO] START - BUTTON Test")
+
+button = DigitalInOut(board.BUTTON)
+button.direction = Direction.INPUT
+button.pull = Pull.UP
+
+print("BUTTON has been initialised.  Press it and see the LED flash over period of FIVE seconds.  Starting immediately.")
+
+sleep(1)
+
+num_tests = 500
+while (num_tests > 0):
+    if button.value:
+        led.value = False
+    else:
+        led.value = True
+
+    sleep(0.01)
+    num_tests = num_tests - 1
+
+print("[INFO] END - BUTTON Test")
 
 
 ### i2c Test
