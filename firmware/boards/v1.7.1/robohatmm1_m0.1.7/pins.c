@@ -56,7 +56,7 @@ STATIC const mp_rom_map_elem_t board_global_dict_table[] = {
 
 	// I2C on SERCOM3
 	{ MP_ROM_QSTR(MP_QSTR_SDA1), MP_ROM_PTR(&pin_PA00) },
-	{ MP_ROM_QSTR(MP_QSTR_SCL1), MP_ROM_PTR(&pin_PA01) }
+	{ MP_ROM_QSTR(MP_QSTR_SCL1), MP_ROM_PTR(&pin_PA01) },
 	
 	// SPI on SERCOM4
 	{ MP_ROM_QSTR(MP_QSTR_SCK), MP_ROM_PTR(&pin_PB11) },
