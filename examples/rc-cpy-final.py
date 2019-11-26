@@ -1,8 +1,8 @@
-# CircuitPython Test for Robotics Masters MM1
+# CircuitPython Donkey Car Serial Driver
 #
 # Notes:
-#   This is to be run using CircuitPython 4.0
-#   Date: 15/05/2019
+#   This is to be run using CircuitPython 5.0
+#   Date: 26/11/2019
 #
 import time
 import board
@@ -23,8 +23,8 @@ uart = busio.UART(board.PI_RX, board.PI_TX, baudrate = 115200, timeout = 0.001)
 steering_pwm = PWMOut(board.SERVO1, duty_cycle = 2 ** 15, frequency = 50)
 throttle_pwm = PWMOut(board.SERVO2, duty_cycle = 2 ** 15, frequency = 50)
 
-steering_channel = PulseIn(board.RCH1, maxlen=64, idle_state=0)
-throttle_channel = PulseIn(board.RCH2, maxlen=64, idle_state=0)
+steering_channel = PulseIn(board.RCC3, maxlen=64, idle_state=0)
+throttle_channel = PulseIn(board.RCC4, maxlen=64, idle_state=0)
 
 ## Set some other variables
 SMOOTHING_INTERVAL_IN_S = 0.025
