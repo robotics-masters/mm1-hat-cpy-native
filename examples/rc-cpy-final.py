@@ -1,8 +1,8 @@
-# CircuitPython Donkey Car Serial Driver
+# CircuitPython Test for Robotics Masters MM1
 #
 # Notes:
-#   This is to be run using CircuitPython 5.0
-#   Date: 26/11/2019
+#   This is to be run using CircuitPython 4.0
+#   Date: 15/05/2019
 #
 import time
 import board
@@ -17,7 +17,7 @@ led.direction = Direction.OUTPUT
 
 ## set up serial UART
 # note UART(TX, RX, baudrate)
-uart = busio.UART(board.PI_RX, board.PI_TX, baudrate = 115200, timeout = 0.001)
+uart = busio.UART(board.TX1, board.RX1, baudrate = 115200, timeout = 0.001)
 
 ## set up servos and radio control channels
 steering_pwm = PWMOut(board.SERVO1, duty_cycle = 2 ** 15, frequency = 50)
