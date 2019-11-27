@@ -20,11 +20,11 @@ led.direction = Direction.OUTPUT
 uart = busio.UART(board.TX1, board.RX1, baudrate = 115200, timeout = 0.001)
 
 ## set up servos and radio control channels
-steering_pwm = PWMOut(board.SERVO1, duty_cycle = 2 ** 15, frequency = 50)
-throttle_pwm = PWMOut(board.SERVO2, duty_cycle = 2 ** 15, frequency = 50)
+steering_pwm = PWMOut(board.SERVO2, duty_cycle = 2 ** 15, frequency = 50)
+throttle_pwm = PWMOut(board.SERVO1, duty_cycle = 2 ** 15, frequency = 50)
 
-steering_channel = PulseIn(board.RCC3, maxlen=64, idle_state=0)
-throttle_channel = PulseIn(board.RCC4, maxlen=64, idle_state=0)
+steering_channel = PulseIn(board.RCC4, maxlen=64, idle_state=0)
+throttle_channel = PulseIn(board.RCC3, maxlen=64, idle_state=0)
 
 ## Set some other variables
 SMOOTHING_INTERVAL_IN_S = 0.025
