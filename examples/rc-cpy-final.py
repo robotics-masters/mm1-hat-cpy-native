@@ -1,9 +1,12 @@
-# CircuitPython Test for Robotics Masters MM1
+# Donkey Car Driver for Robotics Masters Robo HAT MM1
 #
 # Notes:
-#   This is to be run using CircuitPython 4.0
+#   This is to be run using CircuitPython 5.0
 #   Date: 15/05/2019
+#   Updated: 02/12/2019
 #
+#
+
 import time
 import board
 import busio
@@ -15,7 +18,6 @@ from pulseio import PWMOut, PulseIn, PulseOut
 SMOOTHING_INTERVAL_IN_S = 0.025
 DEBUG = False
 ACCEL_RATE = 10
-last_update = time.monotonic()
 
 ## functions
 def servo_duty_cycle(pulse_ms, frequency = 60):
@@ -91,6 +93,8 @@ for i in range(0, 2):
 	time.sleep(0.5)
 	led.value = False
 	time.sleep(0.5)
+
+last_update = time.monotonic()
 
 # GOTO: main()
 
