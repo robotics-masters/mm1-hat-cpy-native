@@ -11,26 +11,6 @@ import busio
 from digitalio import DigitalInOut, Direction
 from pulseio import PWMOut, PulseIn, PulseOut
 
-## set up on-board LED
-led = DigitalInOut(board.LED)
-led.direction = Direction.OUTPUT
-
-## set up serial UART
-# note UART(TX, RX, baudrate)
-uart = busio.UART(board.TX1, board.RX1, baudrate = 115200, timeout = 0.001)
-
-## set up servos and radio control channels
-steering_pwm = PWMOut(board.SERVO2, duty_cycle = 2 ** 15, frequency = 60)
-throttle_pwm = PWMOut(board.SERVO1, duty_cycle = 2 ** 15, frequency = 60)
-
-steering_channel = PulseIn(board.RCC4, maxlen=64, idle_state=0)
-throttle_channel = PulseIn(board.RCC3, maxlen=64, idle_state=0)
-
-## Set some other variables
-SMOOTHING_INTERVAL_IN_S = 0.025
-DEBUG = False
-last_update = time.monotonic()
-
 ## functions
 def servo_duty_cycle(pulse_ms, frequency = 60):
 	period_ms = 1.0 / frequency * 1000.0
@@ -58,6 +38,26 @@ class Control:
 	self.channel = channel
 	self.value = value
 	self.servo.duty_cycle = servo_duty_cycle(value)
+
+## set up on-board LED
+led = DigitalInOut(board.LED)
+led.direction = Direction.OUTPUT
+
+## set up serial UART
+# note UART(TX, RX, baudrate)
+uart = busio.UART(board.TX1, board.RX1, baudrate = 115200, timeout = 0.001)
+
+## set up servos and radio control channels
+steering_pwm = PWMOut(board.SERVO2, duty_cycle = 2 ** 15, frequency = 60)
+throttle_pwm = PWMOut(board.SERVO1, duty_cycle = 2 ** 15, frequency = 60)
+
+steering_channel = PulseIn(board.RCC4, maxlen=64, idle_state=0)
+throttle_channel = PulseIn(board.RCC3, maxlen=64, idle_state=0)
+
+## Set some other variables
+SMOOTHING_INTERVAL_IN_S = 0.025
+DEBUG = False
+last_update = time.monotonic()
 
 steering = Control("Steering", steering_pwm, steering_channel, 1500)
 throttle = Control("Throttle", throttle_pwm, throttle_channel, 1500)
