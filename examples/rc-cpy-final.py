@@ -20,8 +20,8 @@ led.direction = Direction.OUTPUT
 uart = busio.UART(board.TX1, board.RX1, baudrate = 115200, timeout = 0.001)
 
 ## set up servos and radio control channels
-steering_pwm = PWMOut(board.SERVO2, duty_cycle = 2 ** 15, frequency = 50)
-throttle_pwm = PWMOut(board.SERVO1, duty_cycle = 2 ** 15, frequency = 50)
+steering_pwm = PWMOut(board.SERVO2, duty_cycle = 2 ** 15, frequency = 60)
+throttle_pwm = PWMOut(board.SERVO1, duty_cycle = 2 ** 15, frequency = 60)
 
 steering_channel = PulseIn(board.RCC4, maxlen=64, idle_state=0)
 throttle_channel = PulseIn(board.RCC3, maxlen=64, idle_state=0)
@@ -48,6 +48,7 @@ def servo_duty_cycle(pulse_ms, frequency = 50):
 	return duty_cycle
 
 def state_changed(control):
+        prev = control.value
 	control.channel.pause()
 	for i in range(0, len(control.channel)):
 		val = control.channel[i]
@@ -69,7 +70,7 @@ class Control:
 	self.servo.duty_cycle = servo_duty_cycle(value)
 
 steering = Control("Steering", steering_pwm, steering_channel, 1500)
-throttle = Control("Throttle", throttle_pwm, throttle_channel, 1000)
+throttle = Control("Throttle", throttle_pwm, throttle_channel, 1500)
 
 def main():
 	global last_update
