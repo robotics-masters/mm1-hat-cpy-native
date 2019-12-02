@@ -31,18 +31,8 @@ SMOOTHING_INTERVAL_IN_S = 0.025
 DEBUG = False
 last_update = time.monotonic()
 
-## Hardware Notification: starting
-print("preparing to start...")
-for i in range(0, 2):
-	led.value = True
-	time.sleep(0.5)
-	led.value = False
-	time.sleep(0.5)
-
-## GO TO: main()
-
 ## functions
-def servo_duty_cycle(pulse_ms, frequency = 50):
+def servo_duty_cycle(pulse_ms, frequency = 60):
 	period_ms = 1.0 / frequency * 1000.0
 	duty_cycle = int(pulse_ms / 1000 / (period_ms / 65535.0))
 	return duty_cycle
@@ -71,6 +61,16 @@ class Control:
 
 steering = Control("Steering", steering_pwm, steering_channel, 1500)
 throttle = Control("Throttle", throttle_pwm, throttle_channel, 1500)
+
+## Hardware Notification: starting
+print("preparing to start...")
+for i in range(0, 2):
+	led.value = True
+	time.sleep(0.5)
+	led.value = False
+	time.sleep(0.5)
+
+# GOTO: main()
 
 def main():
 	global last_update
