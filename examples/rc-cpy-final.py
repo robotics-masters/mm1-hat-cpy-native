@@ -11,6 +11,12 @@ import busio
 from digitalio import DigitalInOut, Direction
 from pulseio import PWMOut, PulseIn, PulseOut
 
+## Customisation these variables
+SMOOTHING_INTERVAL_IN_S = 0.025
+DEBUG = False
+ACCEL_RATE = 10
+last_update = time.monotonic()
+
 ## functions
 def servo_duty_cycle(pulse_ms, frequency = 60):
 	period_ms = 1.0 / frequency * 1000.0
@@ -22,8 +28,29 @@ def state_changed(control):
 	control.channel.pause()
 	for i in range(0, len(control.channel)):
 		val = control.channel[i]
+                # prevent ranges outside of control space
 		if(val < 1000 or val > 2000):
 			continue
+		# set new value
+		control.value = (control.value + val) / 2
+
+	if DEBUG:
+		print("%f\t%s (%i): %i (%i)" % (time.monotonic(), control.name, len(control.channel), control.value, servo_duty_cycle(control.value)))
+	control.channel.clear()
+	control.channel.resume()
+
+def state_changed_throttle(control):
+        prev = control.value
+	control.channel.pause()
+	for i in range(0, len(control.channel)):
+		val = control.channel[i]
+                # prevent ranges outside of control space
+		if(val < 1000 or val > 2000):
+			continue
+		# cap maximum acceleration to prevent stall
+		if (val - prev) > ACCEL_RATE:
+                        val = (control.value + ACCEL_RATE)
+                # set new value
 		control.value = (control.value + val) / 2
 
 	if DEBUG:
@@ -54,11 +81,6 @@ throttle_pwm = PWMOut(board.SERVO1, duty_cycle = 2 ** 15, frequency = 60)
 steering_channel = PulseIn(board.RCC4, maxlen=64, idle_state=0)
 throttle_channel = PulseIn(board.RCC3, maxlen=64, idle_state=0)
 
-## Set some other variables
-SMOOTHING_INTERVAL_IN_S = 0.025
-DEBUG = False
-last_update = time.monotonic()
-
 steering = Control("Steering", steering_pwm, steering_channel, 1500)
 throttle = Control("Throttle", throttle_pwm, throttle_channel, 1500)
 
@@ -87,7 +109,7 @@ def main():
 		last_update = time.monotonic()
 
 		if(len(throttle.channel) != 0):
-			state_changed(throttle)
+			state_changed_throttle(throttle)
 
 		if(len(steering.channel) != 0):
 			state_changed(steering)
