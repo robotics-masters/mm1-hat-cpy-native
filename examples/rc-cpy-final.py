@@ -45,13 +45,13 @@ def state_changed_throttle(control):
         prev = control.value
 	control.channel.pause()
 	for i in range(0, len(control.channel)):
-		val = control.channel[i]
+		#val = control.channel[i]
                 # prevent ranges outside of control space
 		if(val < 1000 or val > 2000):
 			continue
 		# cap maximum acceleration to prevent stall
-		if (val - prev) > ACCEL_RATE:
-                        val = (control.value + ACCEL_RATE)
+		#if (val - prev) > ACCEL_RATE:
+                #        val = (control.value + ACCEL_RATE)
                 # set new value
 		control.value = (control.value + val) / 2
 
@@ -113,7 +113,8 @@ def main():
 		last_update = time.monotonic()
 
 		if(len(throttle.channel) != 0):
-			state_changed_throttle(throttle)
+			#state_changed_throttle(throttle)
+			state_changed(throttle)
 
 		if(len(steering.channel) != 0):
 			state_changed(steering)
