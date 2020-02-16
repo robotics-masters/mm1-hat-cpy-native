@@ -80,8 +80,8 @@ uart = busio.UART(board.TX1, board.RX1, baudrate = 115200, timeout = 0.001)
 steering_pwm = PWMOut(board.SERVO2, duty_cycle = 2 ** 15, frequency = 60)
 throttle_pwm = PWMOut(board.SERVO1, duty_cycle = 2 ** 15, frequency = 60)
 
-steering_channel = PulseIn(board.RCC4, maxlen=64, idle_state=0)
-throttle_channel = PulseIn(board.RCC3, maxlen=64, idle_state=0)
+steering_channel = PulseIn(board.RCC2, maxlen=64, idle_state=0)
+throttle_channel = PulseIn(board.RCC1, maxlen=64, idle_state=0)
 
 steering = Control("Steering", steering_pwm, steering_channel, 1500)
 throttle = Control("Throttle", throttle_pwm, throttle_channel, 1500)
