@@ -3,7 +3,7 @@
 # Notes:
 #   This is to be run using CircuitPython 5.0
 #   Date: 15/05/2019
-#   Updated: 02/12/2019
+#   Updated: 20/02/2020
 #
 #
 
@@ -21,11 +21,17 @@ ACCEL_RATE = 10
 
 ## functions
 def servo_duty_cycle(pulse_ms, frequency = 60):
+	"""
+	Formula for working out the servo duty_cycle at 16 bit input
+	"""
 	period_ms = 1.0 / frequency * 1000.0
 	duty_cycle = int(pulse_ms / 1000 / (period_ms / 65535.0))
 	return duty_cycle
 
 def state_changed(control):
+	"""
+	Reads the RC channel and smooths value
+	"""
         prev = control.value
 	control.channel.pause()
 	for i in range(0, len(control.channel)):
@@ -42,6 +48,9 @@ def state_changed(control):
 	control.channel.resume()
 
 def state_changed_throttle(control):
+	"""
+	(Testing) Reads RC channel, smooths value and stall prevention (disabled)
+	"""
         prev = control.value
 	control.channel.pause()
 	for i in range(0, len(control.channel)):
@@ -61,6 +70,9 @@ def state_changed_throttle(control):
 	control.channel.resume()
 
 class Control:
+     """
+     Class for a RC Control Channel
+     """
      def __init__(self, name, servo, channel, value):
 	self.name = name
 	self.servo = servo
@@ -72,17 +84,19 @@ class Control:
 led = DigitalInOut(board.LED)
 led.direction = Direction.OUTPUT
 
-## set up serial UART
+## set up serial UART to Raspberry Pi
 # note UART(TX, RX, baudrate)
 uart = busio.UART(board.TX1, board.RX1, baudrate = 115200, timeout = 0.001)
 
-## set up servos and radio control channels
+## set up servos
 steering_pwm = PWMOut(board.SERVO2, duty_cycle = 2 ** 15, frequency = 60)
 throttle_pwm = PWMOut(board.SERVO1, duty_cycle = 2 ** 15, frequency = 60)
 
+## set up RC channels.  NOTE: input channels are RCC3 & RCC4 (not RCC1 & RCC2)
 steering_channel = PulseIn(board.RCC4, maxlen=64, idle_state=0)
 throttle_channel = PulseIn(board.RCC3, maxlen=64, idle_state=0)
 
+## setup Control objects.  1500 pulse is off and center steering
 steering = Control("Steering", steering_pwm, steering_channel, 1500)
 throttle = Control("Throttle", throttle_pwm, throttle_channel, 1500)
 
@@ -108,10 +122,12 @@ def main():
 	throttle_val = throttle.value
 
 	while True:
+		## only update every smoothing interval (to avoid jumping)
 		if(last_update + SMOOTHING_INTERVAL_IN_S > time.monotonic()):
 			continue
 		last_update = time.monotonic()
-
+		
+		## check for new RC values (channel will contain data)
 		if(len(throttle.channel) != 0):
 			#state_changed_throttle(throttle)
 			state_changed(throttle)
@@ -121,20 +137,34 @@ def main():
 
 		if(DEBUG):
 			print("Get: %i, %i" % (int(steering.value), int(throttle.value)))
+		
+		## write the RC values to the RPi Serial
 		uart.write(b"%i, %i\r\n" % (int(steering.value), int(throttle.value)))
+		
 		while True:
+			## wait for data on the serial port and read 1 byte
 			byte = uart.read(1)
+			
+			## if no data, break and continue with RC control
 			if(byte == None):
 				break
 			last_input = time.monotonic()
+			
 			if(DEBUG):
 				print("Read from UART: %s" % (byte))
+			
+			## if data is recieved, check if it is the end of a stream
 			if(byte == b'\r'):
 				data = bytearray('')
 				datastr = ''
 				break
+			
 			data[len(data):len(data)] = byte
-			datastr = ''.join([chr(c) for c in data]).strip() # convert bytearray to string
+			
+			## convert bytearray to string
+			datastr = ''.join([chr(c) for c in data]).strip() 
+		
+		## if we make it here, there is serial data from the previous step
 		if(len(datastr) >= 10):
 			steering_val = steering.value
 			throttle_val = throttle.value
@@ -151,9 +181,11 @@ def main():
 				print("Set: %i, %i" % (steering_val, throttle_val))
 
 		if(last_input + 10 < time.monotonic()):
+			## set the servo for RC control
 			steering.servo.duty_cycle = servo_duty_cycle(steering.value)
 			throttle.servo.duty_cycle = servo_duty_cycle(throttle.value)
 		else:
+			## set the servo for serial data (recieved)
 			steering.servo.duty_cycle = servo_duty_cycle(steering_val)
 			throttle.servo.duty_cycle = servo_duty_cycle(throttle_val)
 
