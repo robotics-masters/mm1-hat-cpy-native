@@ -30,6 +30,7 @@ ACCEL_RATE = 10
 # Customise these for different remotes
 REMOTE_MAX_PULSE = 2000
 REMOTE_MIN_PULSE = 1000
+REMOTE_STOP_PULSE = 1500
 
 ## cannot have DEBUG and USB_SERIAL
 if USB_SERIAL:
@@ -87,7 +88,7 @@ class Control:
         control.channel.resume()
 
 class MotorType:
-    def __init__(self, name, pwmpin, channelpin, frequency=60, duty_cycle=0, directionpin=None):
+    def __init__(self, name, pwmpin, channelpin, directionpin=None, value=REMOTE_STOP_PULSE, frequency=60, duty_cycle=0):
         self.name = name
         self.pwm = PWMOut(pwmpin, frequency=frequency, duty_cycle=duty_cycle)
         self.channel = PulseIn(channelpin, maxlen=64, idle_state=0)
