@@ -106,6 +106,10 @@ class MotorType:
         self.control = None
         self.value = 0
 
+    def duty_cycle(self, value):
+	self.pwm.duty_cycle = self.update_function(value)
+	return self.servo.duty_cycle
+
     def state_changed(self):
         ''' Reads the RC channel and smooths value '''
         #self.channel.pause()
@@ -113,17 +117,17 @@ class MotorType:
         for i in range(0, len(self.channel)):
             val = self.channel[i]
             # prevent ranges outside of control space
-            if(REMOTE_MIN_PULSE < 1000 or val > REMOTE_MAX_PULSE):
+            if(REMOTE_MAX_PULSE < val < REMOTE_MIN_PULSE):
                 continue
             # set new value
-            control.value = (control.value + val) / 2
+            self.value = (self.value + val) / 2
 
         if DEBUG:
             logger.debug("%f\t%s (%i): %i (%i)" % (time.monotonic(), control.name, len(
                 control.channel), control.value, servo_duty_cycle(control.value)))
 
-        control.channel.clear()
-        #control.channel.resume()
+        self.channel.clear()
+        #self.channel.resume()
     
         
         
