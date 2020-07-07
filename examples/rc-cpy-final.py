@@ -86,6 +86,47 @@ class Control:
         control.channel.clear()
         control.channel.resume()
 
+class MotorType:
+    def __init__(self, name, pwmpin, channelpin, frequency=60, duty_cycle=0, directionpin=None):
+        self.name = name
+        self.pwm = PWMOut(pwmpin, frequency=frequency, duty_cycle=duty_cycle)
+        self.channel = PulseIn(channelpin, maxlen=64, idle_state=0)
+
+        # extra motor control things for PWM Motors
+        if directionpin not None:
+            self.direction = DigitalInOut(directionpin)
+            self.direction.direction = Direction.OUTPUT
+            self.direction.value = False
+            self.update_function = motor_duty_cycle
+        else:
+            self.direction = None
+            self.update_function = servo_duty_cycle
+
+        # control object now in this one
+        self.control = None
+        self.value = 0
+
+    def state_changed(self):
+        ''' Reads the RC channel and smooths value '''
+        #self.channel.pause()
+        
+        for i in range(0, len(self.channel)):
+            val = self.channel[i]
+            # prevent ranges outside of control space
+            if(REMOTE_MIN_PULSE < 1000 or val > REMOTE_MAX_PULSE):
+                continue
+            # set new value
+            control.value = (control.value + val) / 2
+
+        if DEBUG:
+            logger.debug("%f\t%s (%i): %i (%i)" % (time.monotonic(), control.name, len(
+                control.channel), control.value, servo_duty_cycle(control.value)))
+
+        control.channel.clear()
+        #control.channel.resume()
+    
+        
+        
 
 # set up on-board LED
 led = DigitalInOut(board.LED)
