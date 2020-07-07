@@ -6,6 +6,7 @@
 #   Updated: 20/02/2020
 #   Updated: 8/03/2020 (sctse999)
 #   Updated: 11/05/2020 (wallarug)
+#   Updated: 07/07/2020 (wallarug)
 #
 #
 
@@ -39,38 +40,47 @@ def servo_duty_cycle(pulse_ms, frequency = 60):
     duty_cycle = int(pulse_ms / 1000 / (period_ms / 65535.0))
     return duty_cycle
 
-
-def state_changed(control):
-    """
-    Reads the RC channel and smooths value
-    """
-    control.channel.pause()
-    for i in range(0, len(control.channel)):
-        val = control.channel[i]
-        # prevent ranges outside of control space
-        if(val < 1000 or val > 2000):
-            continue
-        # set new value
-        control.value = (control.value + val) / 2
-
-    if DEBUG:
-        logger.debug("%f\t%s (%i): %i (%i)" % (time.monotonic(), control.name, len(
-            control.channel), control.value, servo_duty_cycle(control.value)))
-    control.channel.clear()
-    control.channel.resume()
+def motor_duty_cycle(pulse, frequency = 500):
+	duty_cycle = 0
+	if(pulse > 2000 or pulse < 1000):
+		return duty_cycle # if the pulse length is invalid, 0% duty cycle to turn the motor off
+	if(pulse < 1500):
+		motor_direction.value = False
+		duty_cycle = (1500 - pulse) / 500
+	if(pulse > 1500):
+		motor_direction.value = True
+		duty_cycle = (2000 - pulse) / 500
+	# here duty_cycle is between 0 and 100
+	return int(duty_cycle * 65535.0)
 
 
 class Control:
     """
-    Class for a RC Control Channel
+    Class for a managing and mapping RC Channels to Servos
     """
-
     def __init__(self, name, servo, channel, value):
         self.name = name
         self.servo = servo
         self.channel = channel
         self.value = value
         self.servo.duty_cycle = servo_duty_cycle(value)
+        
+    def state_changed(self):
+        ''' Reads the RC channel and smooths value '''
+        self.channel.pause()
+        for i in range(0, len(self.channel)):
+            val = self.channel[i]
+            # prevent ranges outside of control space
+            if(val < 1000 or val > 2000):
+                continue
+            # set new value
+            control.value = (control.value + val) / 2
+
+        if DEBUG:
+            logger.debug("%f\t%s (%i): %i (%i)" % (time.monotonic(), control.name, len(
+                control.channel), control.value, servo_duty_cycle(control.value)))
+        control.channel.clear()
+        control.channel.resume()
 
 
 # set up on-board LED
