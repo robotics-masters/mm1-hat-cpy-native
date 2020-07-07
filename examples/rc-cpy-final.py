@@ -27,6 +27,10 @@ USB_SERIAL = False
 SMOOTHING_INTERVAL_IN_S = 0.025
 ACCEL_RATE = 10
 
+# Customise these for different remotes
+REMOTE_MAX_PULSE = 2000
+REMOTE_MIN_PULSE = 1000
+
 ## cannot have DEBUG and USB_SERIAL
 if USB_SERIAL:
     DEBUG = False
