@@ -23,6 +23,7 @@ logger.setLevel(logging.INFO)
 # Customisation these variables
 DEBUG = False
 USB_SERIAL = False
+DIFF_STEERING = True
 SMOOTHING_INTERVAL_IN_S = 0.025
 ACCEL_RATE = 10
 
@@ -175,15 +176,26 @@ def main():
 
         if(last_input + 10 < time.monotonic()):
             # set the servo for RC control
-            left_val = throttle.value - (1500 - steering.value)
-            right_val = throttle.value + (1500 - steering.value)
-            
-            steering.servo.duty_cycle = servo_duty_cycle(left_val)
-            throttle.servo.duty_cycle = servo_duty_cycle(right_val)
+            if DIFF_STEERING:
+                left_val = throttle.value - (1500 - steering.value)
+                right_val = throttle.value + (1500 - steering.value)
+                
+                steering.servo.duty_cycle = servo_duty_cycle(left_val)
+                throttle.servo.duty_cycle = servo_duty_cycle(right_val)
+            else:
+                steering.servo.duty_cycle = servo_duty_cycle(steering.value)
+                throttle.servo.duty_cycle = servo_duty_cycle(throttle.value)
         else:
             # set the servo for serial data (recieved)
-            steering.servo.duty_cycle = servo_duty_cycle(steering_val)
-            throttle.servo.duty_cycle = servo_duty_cycle(throttle_val)
+            if DIFF_STEERING:
+                left_val = throttle.value - (1500 - steering_val)
+                right_val = throttle.value + (1500 - throttle_val)
+                
+                steering.servo.duty_cycle = servo_duty_cycle(left_val)
+                throttle.servo.duty_cycle = servo_duty_cycle(right_val)
+            else:
+                steering.servo.duty_cycle = servo_duty_cycle(steering_val)
+                throttle.servo.duty_cycle = servo_duty_cycle(throttle_val)
 
 
 # Run
