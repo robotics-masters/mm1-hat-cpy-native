@@ -38,6 +38,21 @@ def servo_duty_cycle(pulse_ms, frequency = 60):
     duty_cycle = int(pulse_ms / 1000 / (period_ms / 65535.0))
     return duty_cycle
 
+def servo_diff_duty_cycle(pulse_ms, frequency = 60):
+    """
+    Formula for working out the servo duty_cycle at 16 bit input
+    """
+    if(pulse_ms > 2000 or pulse_ms < 1000):
+	pulse_ms = 1500  # if the pulse length is invalid, set middle position
+    if(pulse < 1500):
+        pulse_ms = (1500 - pulse) / 500
+    if(pulse > 1500):
+        pulse_ms = (2000 - pulse) / 500
+        
+    period_ms = 1.0 / frequency * 1000.0
+    duty_cycle = int(pulse_ms / 1000 / (period_ms / 65535.0))
+    return duty_cycle
+
 def motor_duty_cycle(pulse, frequency = 500):
 	duty_cycle = 0
 	if(pulse > 2000 or pulse < 1000):
@@ -99,16 +114,8 @@ uart = busio.UART(board.TX1, board.RX1, baudrate=115200, timeout=0.001)
 ## set up servo/motor outputs
 ## For differential you will be using two motors, no servos
 ## Pins are:
-motor_direction_left = DigitalInOut(board.SERVO3)
-motor_direction_left.direction = Direction.OUTPUT
-motor_direction_left.value = False
-
-motor_direction_right = DigitalInOut(board.SERVO4)
-motor_direction_right.direction = Direction.OUTPUT
-motor_direction_right.value = False
-
-left_motor = PWMOut(board.SERVO2, duty_cycle = motor_duty_cycle(1500), frequency = 500)
-right_motor = PWMOut(board.SERVO1, duty_cycle = motor_duty_cycle(1500), frequency = 500)
+left_motor = PWMOut(board.SERVO3, duty_cycle = servo_duty_cycle(1500), frequency = 60)
+right_motor = PWMOut(board.SERVO4, duty_cycle = servo_duty_cycle(1500), frequency = 60)
 
 # set up RC channels.  NOTE: input channels are RCC3 & RCC4 (not RCC1 & RCC2)
 throttle_channel = PulseIn(board.RCC3, maxlen=64, idle_state=0)
