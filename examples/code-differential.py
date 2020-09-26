@@ -56,7 +56,7 @@ class Control:
     Class for a RC Control Channel
     """
 
-    def __init__(self, name, servo, channel, value):
+    def __init__(self, name, servo, channel, value, update_function):
         self.name = name
         self.servo = servo
         self.channel = channel
